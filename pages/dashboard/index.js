@@ -10,56 +10,15 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import ItemModal from "../../components/ItemModal";
+import useData from "../../hooks/useData";
 
 export default function Dashboard() {
   const { isOpen, onOpen, onClose: onCloseModal } = useDisclosure();
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const [indexItemToEdit, setIndexItemToEdit] = useState();
-
   const boxBG = useColorModeValue("gray.300", "blackAlpha.500");
-  const [data, setData] = useState([
-    {
-      name: "Portainer",
-      url: "https://portainer.captain-nemo.xyz/",
-    },
-    {
-      name: "Dozzle",
-      url: "https://dozzle.captain-nemo.xyz/",
-    },
-    {
-      name: "blog",
-      url: "https://blog.captain-nemo.xyz/",
-    },
-    {
-      name: "localhost",
-      url: "http://localhost:3000",
-    },
-    {
-      name: "Files",
-      url: "https://file.captain-nemo.xyz",
-    },
-    {
-      name: "Google",
-      url: "https://www.google.com",
-    },
-  ]);
-
-  const addNew = ({ name, url }) => {
-    setData([...data, { name, url }]);
-  };
-
-  const editItem = ({ name, url }) => {
-    const newData = [...data];
-    newData[indexItemToEdit] = { name, url };
-    setData(newData);
-  };
-
-  const deleteItem = (index) => {
-    const newData = [...data];
-    newData.splice(index, 1);
-    setData(newData);
-  };
+  const { data, onClickSubmit, deleteItem, dataToUpdate, setIndexItemToEdit } =
+    useData();
 
   const onClose = () => {
     setIndexItemToEdit();
@@ -86,7 +45,7 @@ export default function Dashboard() {
       >
         {isEditMode ? "Done Edit" : "Edit Mode"}
       </Button>
-      
+
       <SimpleGrid columns={[1, 2, 3, 4, 5, 6]} spacing={3}>
         {data.map((item, i) => {
           const domain = item.url.split("/")[2];
@@ -153,8 +112,8 @@ export default function Dashboard() {
       <ItemModal
         isOpen={isOpen}
         onClose={onClose}
-        data={indexItemToEdit ? data[indexItemToEdit] : null}
-        onSubmit={indexItemToEdit ? editItem : addNew}
+        data={dataToUpdate}
+        onSubmit={onClickSubmit}
       />
     </Box>
   );
