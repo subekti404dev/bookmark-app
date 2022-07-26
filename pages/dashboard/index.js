@@ -9,11 +9,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import AddNewModal from "../../components/AddNewModal";
+import ItemModal from "../../components/ItemModal";
 
 export default function Dashboard() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose: onCloseModal } = useDisclosure();
   const [isEditMode, setIsEditMode] = useState(false);
+
+  const [indexItemToEdit, setIndexItemToEdit] = useState();
+
   const boxBG = useColorModeValue("gray.300", "blackAlpha.500");
   const [data, setData] = useState([
     {
@@ -46,15 +49,32 @@ export default function Dashboard() {
     setData([...data, { name, url }]);
   };
 
+  const editItem = ({ name, url }) => {
+    const newData = [...data];
+    newData[indexItemToEdit] = { name, url };
+    setData(newData);
+  };
+
   const deleteItem = (index) => {
     const newData = [...data];
     newData.splice(index, 1);
     setData(newData);
   };
 
+  const onClose = () => {
+    setIndexItemToEdit();
+    onCloseModal();
+  };
+
   return (
     <Box p={4}>
-      <Button mb={6} onClick={onOpen}>
+      <Button
+        mb={6}
+        onClick={() => {
+          setIndexItemToEdit();
+          onOpen();
+        }}
+      >
         Add
       </Button>
       <Button
@@ -66,7 +86,7 @@ export default function Dashboard() {
       >
         {isEditMode ? "Done Edit" : "Edit Mode"}
       </Button>
-      <AddNewModal isOpen={isOpen} onClose={onClose} onSubmit={addNew} />
+      
       <SimpleGrid columns={[1, 2, 3, 4, 5, 6]} spacing={3}>
         {data.map((item, i) => {
           const domain = item.url.split("/")[2];
@@ -82,7 +102,12 @@ export default function Dashboard() {
               cursor="pointer"
               position={"relative"}
               onClick={() => {
-                window.open(item.url, "_blank");
+                if (isEditMode) {
+                  setIndexItemToEdit(i);
+                  onOpen();
+                } else {
+                  window.open(item.url, "_blank");
+                }
               }}
             >
               {isEditMode && (
@@ -99,7 +124,6 @@ export default function Dashboard() {
                   onClick={(e) => {
                     e.stopPropagation();
                     deleteItem(i);
-                    console.log(`delete ${item.name}`);
                   }}
                 >
                   <CloseIcon w={3} h={3} />
@@ -126,6 +150,12 @@ export default function Dashboard() {
           );
         })}
       </SimpleGrid>
+      <ItemModal
+        isOpen={isOpen}
+        onClose={onClose}
+        data={indexItemToEdit ? data[indexItemToEdit] : null}
+        onSubmit={indexItemToEdit ? editItem : addNew}
+      />
     </Box>
   );
 }
