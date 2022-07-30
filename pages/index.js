@@ -1,4 +1,5 @@
 import { CloseIcon } from "@chakra-ui/icons";
+import { HStack } from "@chakra-ui/react";
 import {
   Box,
   Button,
@@ -10,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import ItemModal from "../components/ItemModal";
+import ThemeToggle from "../components/ThemeToggle";
 import useData from "../hooks/useData";
 
 export default function Dashboard() {
@@ -27,25 +29,29 @@ export default function Dashboard() {
 
   return (
     <Box p={4}>
-      <Button
-        mb={6}
-        onClick={() => {
-          setIndexItemToEdit();
-          onOpen();
-        }}
-      >
-        Add
-      </Button>
-      <Button
-        mb={6}
-        ml={2}
-        onClick={() => {
-          setIsEditMode(!isEditMode);
-        }}
-      >
-        {isEditMode ? "Done Edit" : "Edit Mode"}
-      </Button>
-
+      <Flex>
+        <Flex flex={1}>
+          <Button
+            mb={6}
+            onClick={() => {
+              setIndexItemToEdit();
+              onOpen();
+            }}
+          >
+            Add
+          </Button>
+          <Button
+            mb={6}
+            ml={2}
+            onClick={() => {
+              setIsEditMode(!isEditMode);
+            }}
+          >
+            {isEditMode ? "Done Edit" : "Edit Mode"}
+          </Button>
+        </Flex>
+        <ThemeToggle />
+      </Flex>
       <SimpleGrid columns={[1, 2, 3, 4, 5, 6]} spacing={3}>
         {data.map((item, i) => {
           const domain = item.url.split("/")[2];
