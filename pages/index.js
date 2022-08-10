@@ -103,7 +103,7 @@ export default function Dashboard() {
                 <Image
                   width={50}
                   height={50}
-                  src={iconUrl}
+                  src={`/api/icon?url=${iconUrl}`}
                   fallbackSrc={defaultIcon}
                   borderRadius={8}
                 />
