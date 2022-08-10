@@ -10,9 +10,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import ItemModal from "../components/ItemModal";
-import ThemeToggle from "../components/ThemeToggle";
-import useData from "../hooks/useData";
+import ItemModal from "../../components/ItemModal";
+import ThemeToggle from "../../components/ThemeToggle";
+import useData from "../../hooks/useData";
 
 export default function Dashboard() {
   const { isOpen, onOpen, onClose: onCloseModal } = useDisclosure();
