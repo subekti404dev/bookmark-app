@@ -1,4 +1,5 @@
 import { CloseIcon } from "@chakra-ui/icons";
+import { HStack } from "@chakra-ui/react";
 import {
   Box,
   Button,
@@ -9,8 +10,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import ItemModal from "../../components/ItemModal";
-import useData from "../../hooks/useData";
+import ItemModal from "../components/ItemModal";
+import ThemeToggle from "../components/ThemeToggle";
+import useData from "../hooks/useData";
 
 export default function Dashboard() {
   const { isOpen, onOpen, onClose: onCloseModal } = useDisclosure();
@@ -27,30 +29,33 @@ export default function Dashboard() {
 
   return (
     <Box p={4}>
-      <Button
-        mb={6}
-        onClick={() => {
-          setIndexItemToEdit();
-          onOpen();
-        }}
-      >
-        Add
-      </Button>
-      <Button
-        mb={6}
-        ml={2}
-        onClick={() => {
-          setIsEditMode(!isEditMode);
-        }}
-      >
-        {isEditMode ? "Done Edit" : "Edit Mode"}
-      </Button>
-
+      <Flex>
+        <Flex flex={1}>
+          <Button
+            mb={6}
+            onClick={() => {
+              setIndexItemToEdit();
+              onOpen();
+            }}
+          >
+            Add
+          </Button>
+          <Button
+            mb={6}
+            ml={2}
+            onClick={() => {
+              setIsEditMode(!isEditMode);
+            }}
+          >
+            {isEditMode ? "Done Edit" : "Edit Mode"}
+          </Button>
+        </Flex>
+        <ThemeToggle />
+      </Flex>
       <SimpleGrid columns={[1, 2, 3, 4, 5, 6]} spacing={3}>
         {data.map((item, i) => {
-          const domain = item.url.split("/")[2];
-          const iconUrl = `https://urban-purple-guppy.faviconkit.com/${domain}/128`;
           const defaultIcon = "/default_icon.png";
+          const host = item?.url?.split("/")[2];
 
           return (
             <Box
@@ -97,7 +102,7 @@ export default function Dashboard() {
                 <Image
                   width={50}
                   height={50}
-                  src={`/api/icon?url=${iconUrl}`}
+                  src={`/api/icon?host=${host}`}
                   fallbackSrc={defaultIcon}
                   borderRadius={8}
                 />

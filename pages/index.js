@@ -54,9 +54,8 @@ export default function Dashboard() {
       </Flex>
       <SimpleGrid columns={[1, 2, 3, 4, 5, 6]} spacing={3}>
         {data.map((item, i) => {
-          const domain = item.url.split("/")[2];
-          const iconUrl = `https://urban-purple-guppy.faviconkit.com/${domain}/128`;
           const defaultIcon = "/default_icon.png";
+          const host = item?.url?.split("/")[2];
 
           return (
             <Box
@@ -103,7 +102,7 @@ export default function Dashboard() {
                 <Image
                   width={50}
                   height={50}
-                  src={`/api/icon?url=${iconUrl}`}
+                  src={`/api/icon?host=${host}`}
                   fallbackSrc={defaultIcon}
                   borderRadius={8}
                 />
